@@ -1,4 +1,4 @@
-package point;
+package io.hhplus.tdd.point;
 
 public class PointServiceUseTest {
 }
