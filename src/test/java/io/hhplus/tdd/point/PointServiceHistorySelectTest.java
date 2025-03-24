@@ -32,7 +32,7 @@ public class PointServiceHistorySelectTest {
 
         PointService pointService = new PointServiceImpl(userPointTable, pointHistoryTable);
 
-        List<PointHistory> resultList = pointService.selectAllByUserId(10L);
+        List<PointHistory> resultList = pointService.selectPointHistoryAllByUserId(10L);
 
         assertEquals(3, resultList.size());
     }

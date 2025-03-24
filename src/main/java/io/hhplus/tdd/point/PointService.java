@@ -12,5 +12,5 @@ public interface PointService {
 
     PointHistory insertPointHistory(UserPoint userPoint, TransactionType transactionType, long timeMillis);
 
-    List<PointHistory> selectAllByUserId(long userPointId);
+    List<PointHistory> selectPointHistoryAllByUserId(long userPointId);
 }
