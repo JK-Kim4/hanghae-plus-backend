@@ -36,7 +36,7 @@ public class PointServiceChargeTest {
                         () -> pointService.charge(targetUserPoint.id(), unacceptableAmount)),
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> pointService.charge(targetUserPoint.id(), minusAmount)),
-                () -> assertEquals(ErrorResponse.ERROR_MESSAGE_NOT_ALLOWED_PARAMETER,
+                () -> assertEquals(ErrorResponse.ERROR_MESSAGE_OUT_OF_RANGE,
                         assertThrows(IllegalArgumentException.class,
                                 () -> pointService.charge(targetUserPoint.id(), zeroAmount))
                                 .getMessage())
