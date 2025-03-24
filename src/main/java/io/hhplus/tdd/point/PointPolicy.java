@@ -13,12 +13,16 @@ public class PointPolicy {
     private static final long MAXIMUM_CHARGE_LIMIT = 3_000_000L;
     private static final long MAX_BALANCE = 100_000_000L;
 
-    public static void validate(long amount, long remainAmount) {
+    public static void chargePointValidate(long amount, long remainAmount) {
 
         if (amount < MINIMUM_CHARGE_LIMIT) throw new IllegalArgumentException(ErrorResponse.ERROR_MESSAGE_OUT_OF_RANGE);
         if (amount > MAXIMUM_CHARGE_LIMIT) throw new IllegalArgumentException(ErrorResponse.ERROR_MESSAGE_OUT_OF_RANGE);
         if ((amount + remainAmount) > MAX_BALANCE) throw new IllegalArgumentException(ErrorResponse.ERROR_MESSAGE_OVER_MAX_BALANCE);
 
+    }
+
+    public static void usePointValidate(long amount, long remainAmount) {
+        if (amount > remainAmount) throw new IllegalArgumentException(ErrorResponse.ERROR_MESSAGE_NOT_ENOUGH_BALANCE);
     }
 
 }

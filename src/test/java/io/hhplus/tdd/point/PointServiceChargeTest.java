@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class PointServiceChargeTest {
 
-    @DisplayName("[정책 1] 충전 금액은 반드시 100원 이상이어야합니다. (throw IllegalArgumentException)")
+    @DisplayName("[정책-충전 1] 충전 금액은 반드시 100원 이상이어야합니다. (throw IllegalArgumentException)")
     @Test
     void throw_IllegalArgumentException_when_charging_amount_is_not_acceptable(
             @Mock UserPointTable userPointTable
@@ -43,7 +43,7 @@ public class PointServiceChargeTest {
         );
     }
 
-    @DisplayName("[정책 2] 한번에 충전할 수 있는 금액은 3,000,000원을 초과할 수 없습니다. (throw IllegalArgumentException)")
+    @DisplayName("[정책-충전 2] 한번에 충전할 수 있는 금액은 3,000,000원을 초과할 수 없습니다. (throw IllegalArgumentException)")
     @Test
     void throw_IllegalArgumentException_when_charging_amount_is_out_of_range(
             @Mock UserPointTable userPointTable
@@ -64,7 +64,7 @@ public class PointServiceChargeTest {
         assertEquals(ErrorResponse.ERROR_MESSAGE_OUT_OF_RANGE, illegalArgumentException.getMessage());
     }
 
-    @DisplayName("[정책 3] 최대로 보유할 수 있는 잔고액은 100,000,000원을 초과할 수 없습니다. (throw IllegalArgumentException)")
+    @DisplayName("[정책-충전 3] 최대로 보유할 수 있는 잔고액은 100,000,000원을 초과할 수 없습니다. (throw IllegalArgumentException)")
     @Test
     void throw_IllegalArgumentException_when_balance_amount_is_out_of_range(
             @Mock UserPointTable userPointTable
@@ -86,14 +86,14 @@ public class PointServiceChargeTest {
 
     @DisplayName("정상적인 포인트 충전의 경우 요청 금액을 추가하고 UserPoint객체를 반환한다.")
     @Test
-    void charge_request_amount_and_return_user_point(
+    void charge_amount_request_and_return_user_point(
             @Mock UserPointTable userPointTable
     ){
         long plusAmount = 10000L;
         UserPoint userPoint = UserPoint.empty(10L);
         when(userPointTable.selectById(10L)).thenReturn(userPoint);
 
-        when(userPointTable.insertOrUpdate(userPoint.id(), plusAmount))
+        when(userPointTable.insertOrUpdate(userPoint.id(), (userPoint.point()+ plusAmount) ))
                 .thenReturn(new UserPoint(userPoint.id(), (userPoint.point() + plusAmount), System.currentTimeMillis()));
 
         PointService pointService = new PointServiceImpl(userPointTable);
