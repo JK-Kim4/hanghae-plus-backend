@@ -24,7 +24,7 @@ public class PointServiceImpl implements PointService {
         PointPolicy.chargePointValidate(amount, userPoint.point());
 
         UserPoint chargedUserPoint = userPointTable.insertOrUpdate(userPoint.id(), userPoint.point() + amount);
-        insertPointHistory(chargedUserPoint, TransactionType.CHARGE, System.currentTimeMillis());
+        insertPointHistory(id, amount, TransactionType.CHARGE, System.currentTimeMillis());
         return chargedUserPoint;
     }
 
@@ -34,7 +34,7 @@ public class PointServiceImpl implements PointService {
         PointPolicy.usePointValidate(amount, userPoint.point());
 
         UserPoint usedUserPoint = userPointTable.insertOrUpdate(userPoint.id(), (userPoint.point() - amount));
-        insertPointHistory(usedUserPoint, TransactionType.USE, System.currentTimeMillis());
+        insertPointHistory(id, amount, TransactionType.USE, System.currentTimeMillis());
         return usedUserPoint;
     }
 
@@ -44,10 +44,10 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public PointHistory insertPointHistory(UserPoint userPoint, TransactionType transactionType, long timeMillis) {
+    public PointHistory insertPointHistory(long userId, long amount, TransactionType transactionType, long timeMillis) {
         if(transactionType == null) throw new IllegalArgumentException("transactionType is null");
 
-        return pointHistoryTable.insert(userPoint.id(), userPoint.point(), transactionType, timeMillis);
+        return pointHistoryTable.insert(userId, amount, transactionType, timeMillis);
     }
 
     @Override

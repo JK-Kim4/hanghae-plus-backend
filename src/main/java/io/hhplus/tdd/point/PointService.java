@@ -10,7 +10,7 @@ public interface PointService {
 
     UserPoint selectById(long id);
 
-    PointHistory insertPointHistory(UserPoint userPoint, TransactionType transactionType, long timeMillis);
+    PointHistory insertPointHistory(long userId, long amount, TransactionType transactionType, long timeMillis);
 
     List<PointHistory> selectPointHistoryAllByUserId(long userPointId);
 }

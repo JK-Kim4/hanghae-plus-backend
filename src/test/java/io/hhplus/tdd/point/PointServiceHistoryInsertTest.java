@@ -2,6 +2,7 @@ package io.hhplus.tdd.point;
 
 import io.hhplus.tdd.database.PointHistoryTable;
 import io.hhplus.tdd.database.UserPointTable;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,13 +24,34 @@ public class PointServiceHistoryInsertTest {
     ){
         PointService pointService = new PointServiceImpl(userPointTable, pointHistoryTable);
         assertThrows(IllegalArgumentException.class, () -> {
-            pointService.insertPointHistory(UserPoint.empty(0L), null, System.currentTimeMillis());
+            pointService.insertPointHistory(0L, 100L, null, System.currentTimeMillis());
         });
     }
 
-    @DisplayName("UserPoint와 TransactionType를 전달받아 PointHistory를 추가합니다.")
+    @DisplayName("userpoint id와 amount를 전달받아 PointHistory를 추가합니다.")
     @Test
     void insert_point_history_with_parameters_test(
+            @Mock UserPointTable userPointTable,
+            @Mock PointHistoryTable pointHistoryTable){
+        long userId = 10L; long amount = 100L;
+        long updateMillis = System.currentTimeMillis();
+
+        PointHistory pointHistory = new PointHistory(1L, userId, amount, TransactionType.CHARGE, updateMillis);
+
+        when(pointHistoryTable.insert(userId, amount, TransactionType.CHARGE, updateMillis)).thenReturn(pointHistory);
+
+        PointService pointService = new PointServiceImpl(userPointTable, pointHistoryTable);
+
+        PointHistory result = pointService.insertPointHistory(userId, amount, TransactionType.CHARGE,updateMillis);
+
+        assertEquals(pointHistory, result);
+
+    }
+
+    @DisplayName("UserPoint와 TransactionType를 전달받아 PointHistory를 추가합니다.")
+    @Disabled
+    @Test
+    void insert_point_history_with_parameters_testP_disabled(
             @Mock UserPointTable userPointTable,
             @Mock PointHistoryTable pointHistoryTable
             ){
@@ -41,7 +63,7 @@ public class PointServiceHistoryInsertTest {
 
         PointService pointService = new PointServiceImpl(userPointTable, pointHistoryTable);
 
-        PointHistory result = pointService.insertPointHistory(userPoint, TransactionType.CHARGE,updateMillis);
+        PointHistory result = pointService.insertPointHistory(10L, userPoint.point(), TransactionType.CHARGE,updateMillis);
 
         assertEquals(pointHistory, result);
     }
