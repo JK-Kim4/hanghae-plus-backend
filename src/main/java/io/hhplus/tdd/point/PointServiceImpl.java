@@ -20,22 +20,22 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public UserPoint charge(long id, long amount) {
-        UserPoint userPoint = userPointTable.selectById(id);
-        PointPolicy.chargePointValidate(amount, userPoint.point());
-
-        UserPoint chargedUserPoint = userPointTable.insertOrUpdate(userPoint.id(), userPoint.point() + amount);
-        insertPointHistory(id, amount, TransactionType.CHARGE, System.currentTimeMillis());
-        return chargedUserPoint;
+        UserPoint result = selectById(id).charge(amount);
+        insertOrUpdate(result.id(), result.point(), amount, TransactionType.CHARGE);
+        return result;
     }
 
     @Override
     public UserPoint use(long id, long amount) {
-        UserPoint userPoint = userPointTable.selectById(id);
-        PointPolicy.usePointValidate(amount, userPoint.point());
+        UserPoint result = selectById(id).use(amount);
+        insertOrUpdate(result.id(), result.point(), amount, TransactionType.USE);
+        return result;
+    }
 
-        UserPoint usedUserPoint = userPointTable.insertOrUpdate(userPoint.id(), (userPoint.point() - amount));
-        insertPointHistory(id, amount, TransactionType.USE, System.currentTimeMillis());
-        return usedUserPoint;
+    @Override
+    public UserPoint insertOrUpdate(long id, long currentAmount, long requestAmount, TransactionType type) {
+        insertPointHistory(id, requestAmount, type, System.currentTimeMillis());
+        return userPointTable.insertOrUpdate(id, currentAmount);
     }
 
     @Override
