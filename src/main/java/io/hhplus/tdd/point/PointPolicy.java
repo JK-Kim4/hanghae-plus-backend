@@ -11,12 +11,14 @@ import io.hhplus.tdd.ErrorResponse;
  *
  * - 포인트 사용 정책
  *   - [정책 1] 보유 잔고가 부족할 경우 결제를 진행할 수 없습니다.
+ *   - [정책 1] 최소 주문 금액은 100원 이상이어야합니다.
  *
  *
  * */
 public class PointPolicy {
 
     private static final long MINIMUM_CHARGE_LIMIT = 100L;
+    private static final long MINIMUM_USE_LIMIT = 100L;
     private static final long MAXIMUM_CHARGE_LIMIT = 3_000_000L;
     private static final long MAX_BALANCE = 100_000_000L;
 
@@ -29,6 +31,7 @@ public class PointPolicy {
     }
 
     public static void usePointValidate(long amount, long remainAmount) {
+        if (amount < MINIMUM_USE_LIMIT) throw new IllegalArgumentException(ErrorResponse.ERROR_MESSAGE_OUT_OF_RANGE);
         if (amount > remainAmount) throw new IllegalArgumentException(ErrorResponse.ERROR_MESSAGE_NOT_ENOUGH_BALANCE);
     }
 

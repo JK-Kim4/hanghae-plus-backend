@@ -1,8 +1,12 @@
-package io.hhplus.tdd.point;
+package io.hhplus.tdd.point.service.disabled;
 
 import io.hhplus.tdd.ErrorResponse;
 import io.hhplus.tdd.database.PointHistoryTable;
 import io.hhplus.tdd.database.UserPointTable;
+import io.hhplus.tdd.point.PointService;
+import io.hhplus.tdd.point.PointServiceImpl;
+import io.hhplus.tdd.point.UserPoint;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +17,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+/*
+ * @deprecated
+ * PointService의 포인트 사용 관련 단위 테스트입니다. 의존 객체인 UserPointTable, PointHistoryTable를 대역(Stub)객체로 구현하여 파라미터로 전달받은 금액의 검증 관련 기능을 테스트합니다.
+ * 정책 검증 책임의 별도 객체(PointPolicy.java)를 생성하여 해당 테스트는 더이상 진행하지 않으며 PointPolicyTest.java에서 정책 관련 단위 테스트를 수행합니다.
+ */
 @ExtendWith(MockitoExtension.class)
+@Disabled @Deprecated
 public class PointServiceUseTest {
 
     @DisplayName("[정책-사용 1]보유 잔고가 부족할 경우 결제를 진행할 수 없습니다. (throw IllegalArgumentException)")

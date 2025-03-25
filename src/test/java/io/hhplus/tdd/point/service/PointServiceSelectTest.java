@@ -1,8 +1,12 @@
-package io.hhplus.tdd.point;
+package io.hhplus.tdd.point.service;
 
 import io.hhplus.tdd.database.PointHistoryTable;
 import io.hhplus.tdd.database.UserPointTable;
+import io.hhplus.tdd.point.PointService;
+import io.hhplus.tdd.point.PointServiceImpl;
+import io.hhplus.tdd.point.UserPoint;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +18,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class PointServiceSelectTest {
 
-    @DisplayName("전달받은 고유번호에 해당하는 UserPoint가 table에 존재하지 않을 경우 default 객체를 반환한다.")
+    /*
+    * @deprecated
+    * 등록되지 않은 UserPoint 조회 요청 시  UserPoint.empty(id)를 실행하여 default 객체를 반환합니다. table.getOrDefault(id, UserPoint.empty(id))
+    * UserPoint.empty(id) 기능에 대한 테스트는 UserPointTest.java에서 진행하므로 해당 테스트는 검증하지않습니다.
+    * */
+    @Disabled @Deprecated
+    @DisplayName("UserPointTable에 등록되어있지 않은 사용자를 조회할 경우 amount가 0원인 default객체를 반환합니다.")
     @Test
     void select_default_user_point_object_when_not_exist(
             @Mock UserPointTable userPointTable,
