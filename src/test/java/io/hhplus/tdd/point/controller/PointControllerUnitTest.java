@@ -42,7 +42,6 @@ public class PointControllerUnitTest {
         when(pointService.selectById(id)).thenReturn(result);
 
         mvc.perform(get("/point/1"))
-                //mvc.perform()의 결과를 검증
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(id))
@@ -125,5 +124,68 @@ public class PointControllerUnitTest {
         assertEquals((defaultUserPoint.point() - useAmount), result.point());
     }
 
+    @DisplayName("long 타입이 아닌 파라미터로 조회 요청 시 HTTP STATUS 400(BAD_REQUEST)를 응답한다.")
+    @Test
+    void get_point_fail_response_status_BAD_REQUEST() throws Exception {
+        String failValue = "fail";
+        Float failFloat = 1.0f;
 
+        mvc.perform(get("/point/" + failValue))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        mvc.perform(get("/point/"+failFloat))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @DisplayName("올바르지 않은 타입의 PathVariable 요청 시 HTTP STATUS 400(BAD_REQUEST)를 응답한다.")
+    @Test
+    void charge_point_wrong_parameter_fail_response_status_BAD_REQUEST() throws Exception {
+        String failValue = "fail";
+        Float failFloat = 1.0f;
+
+        mvc.perform(patch("/point/" + failValue + "/charge"))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        mvc.perform(patch("/point/" + failValue + "/use"))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        mvc.perform(patch("/point/" + failFloat + "/charge"))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        mvc.perform(patch("/point/" + failFloat + "/use"))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @DisplayName("비어있는 request body 요청 시 HTTP STATUS 400(BAD_REQUEST)를 응답한다.")
+    @Test
+    void charge_point_null_body_fail_response_status_BAD_REQUEST() throws Exception {
+        String failValue = "fail";
+        String requestBody = objectMapper.writeValueAsString(failValue);
+
+        mvc.perform(patch("/point/" + 1 + "/charge"))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        mvc.perform(patch("/point/" + 1 + "/use"))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        mvc.perform(patch("/point/" + 1 + "/charge")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        mvc.perform(patch("/point/" + 1 + "/use")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
 }
