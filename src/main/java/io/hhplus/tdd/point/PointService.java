@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface PointService {
 
-    UserPoint insertOrUpdate(long id, long currentAmount, long requestAmount, TransactionType type);
+    UserPoint insertOrUpdate(long id, long currentAmount, long requestAmount, TransactionType type, long updateMillis);
 
     UserPoint charge(long id, long amount);
 
