@@ -35,7 +35,7 @@ public class PointServiceUnitTest {
                 .insert(userPoint.id(), chargeAmount, TransactionType.CHARGE, result.updateMillis());
 
         verify(userPointTable, times(1)).
-                insertOrUpdate(id, chargeAmount);
+                insertOrUpdate(id, userPoint.point() + chargeAmount);
     }
 
     @DisplayName("PointService.use() 호출 시 PointHistoryTable.insert()과 userPointTable.insertOrUpdate()가 한번 실행된다.")
@@ -56,7 +56,7 @@ public class PointServiceUnitTest {
                 .insert(userPoint.id(), useAmount, TransactionType.USE, result.updateMillis());
 
         verify(userPointTable, times(1)).
-                insertOrUpdate(id, useAmount);
+                insertOrUpdate(id, userPoint.point() - useAmount);
     }
 
 
