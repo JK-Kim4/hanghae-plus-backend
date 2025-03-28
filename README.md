@@ -268,6 +268,12 @@ public class CountDownLatchRaceCondition {
   - Atomic 객체는 단순한 원자적 연산만 제공하므로, 복잡한 동기화가 필요한 경우에는 다른 동시성 제어 메커니즘을 사용해야 합니다.
 
 
+---
+
+### ReentrantLock / ConcurrentHashMap 을 사용한 이유
+- 처음 동기화 제어 기능 추가에서 synchronized 키워드를 사용하였습니다. 동시성 제어 테스트 코드에서 문제 없이 결과를 확인할 수 있었으나 모니터 잠금 매커니즘은 대기 스레드의 순서나 관리를 할 수 없어 대기 스레드의 순차적 실행을 보장하지 못하였습니다.
+- 입출금 상황을 예로 들어보았을 때 입금과 출금의 순서가 무작위로 실행될 경우 예상치 못한 문제가 발생할 수 있었습니다.
+- 때문에 대기 스레드에 대한 순차적인 실행을 보장하는 ReentrantLock의 공정(fair)모드를 사용하기로 결정하였습니다. 또한 생성된 ReentrantLock 객체는 모든 스레드가 공유할 수 있는 싱글턴 자원이어야 동시성 제어가 올바르게 동작할 수 있어 ConcurrentHashMap을 이용 UserPoint의 id값을 key값으로 동일한 ReentrantLock 객체의 사용을 보장하도록 처리하였습니다.
 
 
 
