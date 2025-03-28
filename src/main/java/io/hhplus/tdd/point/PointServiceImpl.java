@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @RequiredArgsConstructor
@@ -20,16 +21,30 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public UserPoint charge(long id, long amount) {
-        UserPoint result = selectById(id).charge(amount);
-        insertOrUpdate(result.id(), result.point(), amount, TransactionType.CHARGE, result.updateMillis());
-        return result;
+        ReentrantLock reentrantLock = LockFactory.getLock(id);
+
+        reentrantLock.lock();
+        try {
+            UserPoint result = selectById(id).charge(amount);
+            insertOrUpdate(result.id(), result.point(), amount, TransactionType.CHARGE, result.updateMillis());
+            return result;
+        }finally {
+            reentrantLock.unlock();
+        }
     }
 
     @Override
     public UserPoint use(long id, long amount) {
-        UserPoint result = selectById(id).use(amount);
-        insertOrUpdate(result.id(), result.point(), amount, TransactionType.USE, result.updateMillis());
-        return result;
+        ReentrantLock reentrantLock = LockFactory.getLock(id);
+
+        reentrantLock.lock();
+        try {
+            UserPoint result = selectById(id).use(amount);
+            insertOrUpdate(result.id(), result.point(), amount, TransactionType.USE, result.updateMillis());
+            return result;
+        }finally {
+            reentrantLock.unlock();
+        }
     }
 
     @Override
